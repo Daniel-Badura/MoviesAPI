@@ -1,27 +1,39 @@
 // jshint esversion: 9
 const express = require("express");
 const dotenv = require("dotenv");
+const morgan = require("morgan");
+const colors = require("colors");
+const fetch = require("node-fetch");
+const jwt = require('jsonwebtoken');
+const connectDB= require('./config/db');
+const Movie = require("./models/Movie");
 
+
+// Load env
 dotenv.config({ path: "./config/config.env" });
+
+// Connect DB
+connectDB();
+// Routes
+
+const movies = require("./routes/movies");
+
+
 const app = express();
-const PORT = process.env.PORT || 5000;
 
-app.get("/movies", (req, res) => {
-  res.status(200).json({ success: true, msg: "Show all movies" });
-});
-app.post("/movies", (req, res) => {
-  res.status(200).json({ success: true, msg: "Create new movie" });
-});
-app.put("/movies/:id", (req, res) => {
-  res.status(200).json({ success: true, msg: `Update movie ${req.params.id}` });
-});
-app.delete("/movies/:id", (req, res) => {
-  res.status(200).json({ success: true, msg: `Remove movie  ${req.params.id}` });
-});
+// Mount router
 
-app.listen(
-  PORT,
-  console.log(
-    `Server is running on ${process.env.NODE_ENV} mode on port ${PORT}`
-  )
-);
+app.use("/movies", movies);
+// Middleware
+app.use(morgan("common"));
+// Server info
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, console.log(`Server is running on port ${PORT}`.yellow.bold));
+
+// Handle unhandled promise rejections:
+
+process.on('unhandledRejection', (err,promise)=>{
+    console.log(`Error: ${err.message}`.red);
+    server.close(()=>process.exit(1));
+});
