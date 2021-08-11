@@ -1,3 +1,5 @@
+// jshint esversion: 9
+
 const express = require("express");
 const bodyParser = require("body-parser");
 const { authFactory, AuthError } = require("./auth");

@@ -1,9 +1,9 @@
 // jshint esversion: 9
 const Movie = require("../models/Movie");
 const fetch = require("node-fetch");
+
 // @desc       Get all movies
-// @route       Get /movies
-// @access       Public
+
 
 exports.getMovies = async (req, res, next) => {
   try {
@@ -18,16 +18,14 @@ exports.getMovies = async (req, res, next) => {
 };
 
 // @desc       Get movie
-// @route       Get /movies
-// @access       Public
+
 
 exports.getMovie = (req, res, next) => {
   res.status(200).json({ success: true, msg: `Show movie  ${req.params.id}` });
 };
 
 // @desc       Create movie
-// @route       Get /movies
-// @access       Public
+
 
 exports.createMovie = async (req, res, next) => {
   try {
@@ -46,16 +44,14 @@ exports.createMovie = async (req, res, next) => {
 };
 
 // @desc       Update movies
-// @route       Get /movies
-// @access       Public
+
 
 exports.updateMovie = (req, res, next) => {
   res.status(200).json({ success: true, msg: `Update movie ${req.params.id}` });
 };
 
 // @desc       Delete movie
-// @route       Get /movies
-// @access       Public
+
 
 exports.deleteMovie = (req, res, next) => {
   res.status(200).json({ success: true, msg: `Remove movie ${req.params.id}` });
