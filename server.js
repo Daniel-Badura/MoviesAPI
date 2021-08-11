@@ -14,22 +14,19 @@ dotenv.config({ path: "./config/config.env" });
 
 // Connect DB
 connectDB();
+
 // Routes
-
 const movies = require("./routes/movies");
-
-
 const app = express();
-
 // Mount router
-
+app.use(express.json());
 app.use("/movies", movies);
 // Middleware
 app.use(morgan("common"));
 // Server info
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, console.log(`Server is running on port ${PORT}`.yellow.bold));
+const server = app.listen(PORT, console.log(`Server is running on port ${PORT}`.yellow.bold));
 
 // Handle unhandled promise rejections:
 
