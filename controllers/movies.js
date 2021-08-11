@@ -1,6 +1,7 @@
 // jshint esversion: 9
 const Movie = require("../models/Movie");
 const fetch = require("node-fetch");
+const asyncHandler = require('../middleware/asyncHandler');
 
 // @desc       Get all movies
 
