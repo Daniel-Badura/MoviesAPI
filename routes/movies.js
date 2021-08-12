@@ -14,8 +14,8 @@ const router = express.Router();
 
 router
 .route("/")
-.get(getMovies, authorize)
-.post(createMovie, authorize);
+.get(authorize, getMovies)
+.post(authorize, createMovie);
 router
 .route("/:id")
 .get(getMovie)
