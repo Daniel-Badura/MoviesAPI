@@ -1,5 +1,7 @@
 // jshint esversion: 9
+
 const express = require("express");
+const authorize = require('../middleware/auth');
 const {
   getMovies,
   getMovie,
@@ -12,8 +14,8 @@ const router = express.Router();
 
 router
 .route("/")
-.get(getMovies)
-.post(createMovie)
+.get(getMovies, authorize)
+.post(createMovie, authorize);
 router
 .route("/:id")
 .get(getMovie)

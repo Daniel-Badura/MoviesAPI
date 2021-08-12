@@ -8,6 +8,7 @@ const connectDB = require("./config/db");
 const Movie = require("./models/Movie");
 const { authFactory, AuthError } = require("./src/auth");
 const cookieParser = require("cookie-parser");
+const errorHandler = require('./middleware/errorHandler');
 
 dotenv.config({ path: "./config/config.env" });
 const { JWT_SECRET } = process.env;
@@ -71,7 +72,8 @@ app.use((error, _, res, __) => {
 
 // Routes
 const movies = require("./routes/movies");
-
+// Error handler
+app.use(errorHandler);
 // Mount router
 
 app.use("/movies", movies);

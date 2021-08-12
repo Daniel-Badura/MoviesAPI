@@ -17,5 +17,13 @@ const movieSchema = new mongoose.Schema({
     required: [true, "The movie has not directed itself"],
     maxlength: [100, "Director name must not be longer than 100 characters"],
   },
+  addedBy: {
+    type: String,
+    required: true
+  },
+  monthAdded: {
+    type: String,
+    required: true
+  }
 });
 module.exports = mongoose.model("Movie", movieSchema);
