@@ -2,12 +2,16 @@
 const Movie = require("../models/Movie");
 const fetch = require("node-fetch");
 const jwt = require("jsonwebtoken");
+const axios = require("axios");
+// const { fetchMovie } = require("../test");
+
 
 // @desc       Get all movies
 
 exports.getMovies = async (req, res, next) => {
+
   const decoded = res.locals.decoded;
-  console.log(decoded);
+  console.log(`User ${decoded.name} requested movie list.`);
   try {
     const movies = await Movie.find({ addedBy: decoded.name });
     res.status(200).json({ success: true, data: movies });
