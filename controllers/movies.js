@@ -3,6 +3,8 @@ const Movie = require("../models/Movie");
 const fetch = require("node-fetch");
 const jwt = require("jsonwebtoken");
 const axios = require("axios");
+const functions = require('../scripts/functions');
+const { fetchMovie } = require("../scripts/functions");
 // const { fetchMovie } = require("../test");
 
 
@@ -45,9 +47,7 @@ exports.createMovie = async (req, res, next) => {
       (moviesAddedThisMonth.length < 5 && decoded.role == "basic") ||
       decoded.role == "premium"
     ) {
-      fetch(`http://www.omdbapi.com/?apikey=f7196b6c&t=${req.body.Title}`)
-        .then((res) => res.json())
-        .then((data) => {
+      const data = await fetchMovie(req.body.Title);
           Movie.countDocuments({ Title: data.Title }, (err, count) => {
             if (count == 0) {
               if (data.Released == "N/A") {
@@ -67,7 +67,7 @@ exports.createMovie = async (req, res, next) => {
                 .json({ success: false, msg: "Movie already exists" });
             }
           });
-        });
+        
     } else {
       res
       .status(403)
