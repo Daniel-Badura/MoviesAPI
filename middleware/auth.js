@@ -2,8 +2,11 @@
 const jwt = require("jsonwebtoken");
 const asyncHandler = require("./asyncHandler");
 const errorHandler = require("./asyncHandler");
+const Movie = require("../models/Movie");
+const { moviesAdded } = require("../scripts/functions");
 
 const authorize = async (req, res, next) => {
+  // check the JWT token
   let token;
   if (
     req.headers.authorization &&
@@ -18,17 +21,19 @@ const authorize = async (req, res, next) => {
       .status(401)
       .json({ success: false, msg: "You need to be authorized" });
   }
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    res.locals.decoded = decoded;
+  const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    next();
-  } catch (err) {
-    console.log(err);
-    return res
-      .status(401)
-      .json({ success: false, msg: "Incorrect authorization token" });    
-  }
+    try {
+      res.locals.decoded = decoded;
+
+      next();
+    } catch (err) {
+      console.log(err);
+      return res
+        .status(401)
+        .json({ success: false, msg: "Incorrect authorization token" });
+    }
+  
 };
 
 module.exports = authorize;

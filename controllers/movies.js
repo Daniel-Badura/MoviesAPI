@@ -34,26 +34,21 @@ exports.getMovie = (req, res, next) => {
 
 exports.createMovie = async (req, res, next) => {
   const decoded = res.locals.decoded;
+  console.log(decoded)
 
   let dateNow = new Date();
-  monthAdded = dateNow.getFullYear() +" " + dateNow.getMonth();
+  monthNow = dateNow.getFullYear() +" " + dateNow.getMonth();
 
-  try {
-    let moviesAddedThisMonth = await Movie.find({
-      addedBy: decoded.name,
-      monthAdded: monthAdded,
-    });
-    if (
-      (moviesAddedThisMonth.length < 5 && decoded.role == "basic") ||
-      decoded.role == "premium"
-    ) {
+  try { 
       const data = await fetchMovie(req.body.Title);
-          Movie.countDocuments({ Title: data.Title }, (err, count) => {
+      // check if movie exists:
+         Movie.countDocuments({ Title: data.Title }, (err, count) => {
+            // if does not exist, add it to database.
             if (count == 0) {
               if (data.Released == "N/A") {
                 data.Released = Date.now();
               }
-              data.monthAdded = monthAdded;
+              data.monthAdded = monthNow;
               data.addedBy = decoded.name;
               Movie.create(data);
               res.status(201).json({
@@ -61,21 +56,13 @@ exports.createMovie = async (req, res, next) => {
                 msg: `added movie ${data.Title}`,
                 data: data,
               });
+              // if exists return status 403
             } else if (count > 0) {
               res
                 .status(403)
                 .json({ success: false, msg: "Movie already exists" });
             }
           });
-        
-    } else {
-      res
-      .status(403)
-      .json({
-        success: false,
-        msg: " You cannot add more than 5 movies in a month",
-      });
-    }
   } catch (err) {
     console.log(err);
     res.status(400).json({ success: false, msg: err });

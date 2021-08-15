@@ -2,6 +2,7 @@
 
 const express = require("express");
 const authorize = require('../middleware/auth');
+const addConditions = require('../middleware/addMovieConditions');
 const {
   getMovies,
   getMovie,
@@ -15,7 +16,7 @@ const router = express.Router();
 router
 .route("/")
 .get(authorize, getMovies)
-.post(authorize, createMovie);
+.post(authorize, addConditions, createMovie);
 router
 .route("/:id")
 .get(getMovie)
