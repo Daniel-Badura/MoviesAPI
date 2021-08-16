@@ -1,9 +1,7 @@
 // jshint esversion: 9
-// const functions=require('./scripts/functions');
 const { getMovies, getMovie, createMovie } = require("./controllers/movies");
 const {
   fetchMovie,
-  add,
   fetchTest,
   moviesAdded,
 } = require("./scripts/functions");
@@ -26,10 +24,6 @@ mongoose.connection.on("error", () => {
   throw new Error("unable to connect to database");
 });
 
-test("Dummy test 2+2=4", () => {
-  expect(add(2, 2)).toBe(4);
-});
-
 test('Fetch "http://www.omdbapi.com/?apikey=f7196b6c&t=Batman" returns the Batman Movie object', () => {
   expect.assertions(1);
   return fetchMovie("Batman").then((data) => {
@@ -37,7 +31,7 @@ test('Fetch "http://www.omdbapi.com/?apikey=f7196b6c&t=Batman" returns the Batma
   });
 });
 
-it("should throw an error if the title is empty", async () => {
+it("Movie creation should throw an error if the Title field is empty", async () => {
   try {
     await new Movie({
       Title: "",
@@ -52,7 +46,7 @@ it("should throw an error if the title is empty", async () => {
   }
 });
 
-it("should throw an error if the Director is empty", async () => {
+it("Movie creation should throw an error if the Director field is empty", async () => {
   try {
     await new Movie({
       Title: "Movie",
@@ -69,7 +63,7 @@ it("should throw an error if the Director is empty", async () => {
   }
 });
 
-it("Test Movie should be created in database", async () => {
+it("Test Movie should be added to the database", async () => {
   if (await Movie.find({ Title: "Test Movie" })) {
     await Movie.findOneAndDelete({ Title: "Test Movie" });
   }
@@ -79,14 +73,40 @@ it("Test Movie should be created in database", async () => {
     Genre: "Action, Drama, History",
     Director: "Daniel Badura",
     monthAdded: "2021 7",
-    addedBy: "Daniel Badura",
+    addedBy: "Basic Thomas",
   }).save();
 
-  //   const testMovie = Movie.find({
-  //     addedBy: "Daniel Badura"
-  //   });
-
   expect(testMovie.Title).toEqual("Test Movie");
+});
+it("Test Movie already exists, adding duplicate should throw an error", async () => {
+  try {
+    await new Movie({
+      Title: "Test Movie",
+      Released: "1991-08-07T23:00:00.000Z",
+      Genre: "Action, Drama, History",
+      Director: "Daniel Badura",
+      monthAdded: "2021 7",
+      addedBy: "Basic Thomas",
+    }).save();
+  } catch (err) {
+    expect(err.toString()).toMatch(/E11000 duplicate key error collection/);
+  }
+});
+
+test("Function should return Movies added by basic user only", async () => {
+  basicUser = {
+    userId: 123,
+    name: "Basic Thomas",
+    role: "basic",
+    iat: 1629098306,
+    exp: 1629206306,
+    iss: "https://www.netguru.com/",
+    sub: "123",
+  };
+  const moviesBasic = await moviesAdded(basicUser);
+  for (let i = 0; i < moviesBasic.length ; i++) {
+    expect(moviesBasic[i].addedBy).toEqual("Basic Thomas");
+  }  
 });
 it("Test Movie should be removed from database", async () => {
   if (await Movie.find({ Title: "Test Movie" })) {
@@ -94,4 +114,3 @@ it("Test Movie should be removed from database", async () => {
   }
   expect(await Movie.find({ Title: "Test Movie" })).toEqual([]);
 });
-mongoose.disconnect();

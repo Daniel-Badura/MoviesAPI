@@ -1,8 +1,4 @@
 // jshint esversion: 9
-const jwt = require("jsonwebtoken");
-const asyncHandler = require("./asyncHandler");
-const errorHandler = require("./asyncHandler");
-const Movie = require("../models/Movie");
 const { moviesAdded } = require("../scripts/functions");
 
 const addConditions = async (req, res, next) => {
