@@ -1,5 +1,5 @@
 // jshint esversion: 9
-const { moviesAdded } = require("../scripts/functions");
+const { moviesAdded } = require("../scripts/movies");
 
 const addConditions = async (req, res, next) => {
   // check how many movies added by basic user this month

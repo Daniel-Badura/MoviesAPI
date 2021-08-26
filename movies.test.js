@@ -4,7 +4,7 @@ const {
   fetchMovie,
   fetchTest,
   moviesAdded,
-} = require("./scripts/functions");
+} = require("./scripts/movies");
 const Movie = require("./models/Movie");
 const httpMocks = require("node-mocks-http");
 const authorize = require("./middleware/auth");

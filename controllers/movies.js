@@ -3,8 +3,8 @@ const Movie = require("../models/Movie");
 const fetch = require("node-fetch");
 const jwt = require("jsonwebtoken");
 const axios = require("axios");
-const functions = require("../scripts/functions");
-const { fetchMovie } = require("../scripts/functions");
+const functions = require("../scripts/movies");
+const { fetchMovie } = require("../scripts/movies");
 // const { fetchMovie } = require("../test");
 
 // @desc       Get all movies
