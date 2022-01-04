@@ -41,10 +41,10 @@ app.post("/auth", (req, res, next) => {
 });
 
 app.use((error, _, res, __) => {
-  console.error(
+  console.log(
     `Error processing request ${error}. See next message for details`
   );
-  console.error(error);
+  console.log(error);
 
   return res.status(500).json({ error: "internal server error" });
 });
