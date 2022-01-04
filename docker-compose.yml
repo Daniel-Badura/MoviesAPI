@@ -1,4 +1,4 @@
-version: "3.9"
+version: '3.9'
 services:
   app:
     command: node src/server.js
@@ -12,3 +12,5 @@ services:
       - .:/app/
     environment:
       JWT_SECRET: ${JWT_SECRET}
+      MONGO_URI: ${MONGO_URI}
+      PORT: ${PORT}

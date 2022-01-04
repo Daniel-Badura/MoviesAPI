@@ -8,10 +8,7 @@ const {
   moviesAdded,
 } = require("./scripts/movies");
 const Movie = require("./models/Movie");
-const httpMocks = require("node-mocks-http");
-const authorize = require("./middleware/auth");
 const mongoose = require("mongoose");
-const { deleteOne } = require("./models/Movie");
 
 
 dburl = process.env.MONGO_URI;
