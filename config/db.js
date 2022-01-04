@@ -1,8 +1,10 @@
 // jshint esversion: 9
+const path = require("path");
+require('dotenv').config({ path: './config/config.env' });
 const mongoose = require("mongoose");
 
 // 
-const dburl = process.env.MONGO_URI ||  "mongodb+srv://dandeusz:dandeusz@cluster0.3t3pj.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+const dburl = process.env.MONGO_URI;
 const connectDB = async () => {
   const conn = await mongoose.connect(
     dburl,
@@ -10,9 +12,10 @@ const connectDB = async () => {
       useNewUrlParser: true,
       useCreateIndex: true,
       useUnifiedTopology: true,
-      useFindAndModify: false,
+      useFindAndModify: false
     }
   );
+
 
   // const conn = await mongoose.connect("mongodb://localhost:27017/MoviesAPI", {
   //     useNewUrlParser: true,

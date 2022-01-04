@@ -1,4 +1,6 @@
 // jshint esversion: 9
+const path = require("path");
+require('dotenv').config({ path: './config/config.env' });
 const { getMovies, getMovie, createMovie } = require("./controllers/movies");
 const {
   fetchMovie,
@@ -10,9 +12,12 @@ const httpMocks = require("node-mocks-http");
 const authorize = require("./middleware/auth");
 const mongoose = require("mongoose");
 const { deleteOne } = require("./models/Movie");
+
+
+dburl = process.env.MONGO_URI;
 mongoose.Promise = global.Promise;
 mongoose.connect(
-  "mongodb+srv://dandeusz:dandeusz@cluster0.3t3pj.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
+  dburl,
   {
     useNewUrlParser: true,
     useCreateIndex: true,
@@ -104,9 +109,9 @@ test("Function should return Movies added by basic user only", async () => {
     sub: "123",
   };
   const moviesBasic = await moviesAdded(basicUser);
-  for (let i = 0; i < moviesBasic.length ; i++) {
+  for (let i = 0; i < moviesBasic.length; i++) {
     expect(moviesBasic[i].addedBy).toEqual("Basic Thomas");
-  }  
+  }
 });
 it("Test Movie should be removed from database", async () => {
   if (await Movie.find({ Title: "Test Movie" })) {

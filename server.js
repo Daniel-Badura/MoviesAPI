@@ -1,4 +1,5 @@
 // jshint esversion: 9
+
 const express = require("express");
 const dotenv = require("dotenv");
 const morgan = require("morgan");
@@ -12,8 +13,6 @@ const errorHandler = require('./middleware/errorHandler');
 
 dotenv.config({ path: "./config/config.env" });
 const { JWT_SECRET } = process.env;
-// console.log(process.env);
-console.log(JWT_SECRET);
 
 if (!JWT_SECRET) {
   throw new Error("Missing JWT_SECRET env var. Set it and restart the server");
@@ -49,9 +48,11 @@ app.post("/auth", (req, res, next) => {
 
   try {
     const token = auth(username, password);
-    const options = { expires: new Date(Date.now() + 1000 * 60 * 15),
-    httpOnly: true };
-    return res.status(200).cookie("token", token,options).json({ success:true, token });
+    const options = {
+      expires: new Date(Date.now() + 1000 * 60 * 15),
+      httpOnly: true
+    };
+    return res.status(200).cookie("token", token, options).json({ success: true, token });
   } catch (error) {
     if (error instanceof AuthError) {
       return res.status(401).json({ error: error.message });
@@ -78,6 +79,9 @@ app.use(errorHandler);
 
 app.use("/movies", movies);
 // Middleware
+
+
+
 app.use(morgan("common"));
 // Server info
 const PORT = process.env.PORT || 3000;
@@ -90,5 +94,5 @@ const server = app.listen(
 
 process.on("unhandledRejection", (err, promise) => {
   console.log(`Error: ${err.message}`.red);
-//   server.close(() => process.exit(1));
+  //   server.close(() => process.exit(1));
 });
